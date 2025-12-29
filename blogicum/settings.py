@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
 
     'django.contrib.admin',
     'django.contrib.auth',
+    'django_bootstrap5',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -125,3 +127,25 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Кастомные обработчики ошибок
+CSRF_FAILURE_VIEW = 'pages.views.csrf_failure'
+handler404 = 'pages.views.page_not_found'
+handler500 = 'pages.views.server_error'
+
+LOGIN_REDIRECT_URL = '/'  # на главную страницу
+LOGOUT_REDIRECT_URL = '/'  # на главную после выхода
+LOGIN_URL = 'auth/login/'  # путь к форме входа
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+
+# blogicum/settings.py (добавьте рядом с другими настройками)
+DEFAULT_FROM_EMAIL = 'webmaster@blogicum.local'
+SERVER_EMAIL = 'root@blogicum.local'
+EMAIL_SUBJECT_PREFIX = '[Блогикум] '
+
+TEMPLATES_DIR = BASE_DIR / 'templates'

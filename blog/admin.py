@@ -1,7 +1,9 @@
 from django.contrib import admin
 from .models import Category, Location, Post
+from .models import Comment
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 
-# Перевод названия приложения Blog
 admin.site.site_header = 'Панель администратора'
 admin.site.index_title = 'Блог'
 admin.site.site_title = 'Администрирование Блога'
@@ -53,3 +55,19 @@ class PostAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Location, LocationAdmin)
 admin.site.register(Post, PostAdmin)
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('author', 'post', 'created_at', 'text_preview')
+    list_filter = ('created_at', 'author')
+    search_fields = ('text', 'author__username', 'post__title')
+    readonly_fields = ('created_at',)
+
+    def text_preview(self, obj):
+        return obj.text[:50] + '...' if len(obj.text) > 50 else obj.text
+    text_preview.short_description = 'Текст'
+
+
+admin.site.register(Comment, CommentAdmin)
+admin.site.unregister(User)  
+admin.site.register(User, UserAdmin)  
